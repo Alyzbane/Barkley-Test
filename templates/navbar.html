@@ -1,0 +1,10 @@
+<div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4 bg-[#121212]">
+    <a class="ml-5 text-2xl leading-tight text-center md:mx-6 active md:!text-start" href="/" style="font-weight: 700;">
+        <div>Barkley</div>
+        <div class="text-xs font-normal text-white">Research by CS3A</div>
+    </a>
+    <div class="hidden ml-auto md:flex [&>*]:flex [&>*]:items-center h-full">
+        <a href="{{ url_for('index') }}" class="hover:underline hover:opacity-70 underline-offset-4 active:bg-transparent hover:bg-transparent mr-10 font-medium text-base {{ 'active' if request.path == '/' else '' }}" aria-current="page">Home</a>
+        <a href="{{ url_for('demo') }}" class="hover:underline hover:opacity-70 underline-offset-4 active:bg-transparent hover:bg-transparent mr-10 font-medium text-base {{ 'active' if request.path == '/demo' else '' }}">Demo</a>
+    </div>
+</div>

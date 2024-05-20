@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+{% block title %}Image Classification{% endblock %}
+{% block head %}
+  {{ super() }}
+  <script>
+    function toggleNames() {
+        var scientificNames = document.querySelectorAll('.scientific-name');
+        var commonNames = document.querySelectorAll('.common-name');
+        for (var i = 0; i < scientificNames.length; i++) {
+            if (scientificNames[i].style.display === 'none') {
+                scientificNames[i].style.display = 'inline';
+                commonNames[i].style.display = 'none';
+            } else {
+                scientificNames[i].style.display = 'none';
+                commonNames[i].style.display = 'inline';
+            }
+        }
+    }
+  </script>
+{% endblock %}
+{% block content %}
+<div class="container mx-auto p-4 md:p-8 lg:p-16">
+    <h1 class="text-4xl font-bold mb-6">Image Classification</h1>
+    <div class="flex flex-col md:flex-row">
+        <div class="md:w-1/2 mb-6 md:mb-0">
+
+            {% for prediction in predictions %}
+            <div class="mb-4">
+                <div class="flex justify-between items-center mb-1">
+                    <span>
+                        <span class="scientific-name">{{ prediction.scientific_name }}</span>
+                        <span class="common-name" style="display: none;">{{ prediction.common_name }}</span>
+                    </span>
+                    <span>{{ prediction.score }}%</span>
+                </div>
+                <div class="flex w-full h-2 bg-white rounded-full overflow-hidden dark:bg-grey" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100">
+                    <div class="flex flex-col justify-center rounded-full overflow-hidden bg-gradient-to-r from-purple-500 to-yellow-500 text-xs text-white text-center whitespace-nowrap transition duration-500" style="width: {{ prediction.score }}%"></div>
+                </div>
+            </div>
+            {% endfor %}
+            <div class="flex space-x-4">
+                <button class="flex items-center px-4 py-2 bg-gray-700 rounded hover:bg-yellow-500">
+                    <a href="{{ url_for('demo') }}" class="text-white">
+                        <i class="fas fa-sync-alt mr-2"></i>Try another image
+                    </a>
+                </button>
+                <label class="inline-flex items-center cursor-pointer">
+                    <input type="checkbox" value="" class="sr-only peer" onchange="toggleNames()">
+                    <div class="relative w-11 h-6 bg-gray-200 rounded-full peer dark:bg-gray-700 peer-focus:ring-4 peer-focus:ring-yellow-300 dark:peer-focus:ring-yellow-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-yellow-400"></div>
+                    <span class="ms-3 text-sm font-medium text-gray-900 dark:text-gray-300">General Names</span>
+                </label>
+            </div>
+        </div>
+        <div class="w-full md:w-1/2 md:pl-4">
+            <img src="data:image/jpeg;base64,{{ image_data }}" alt="Uploaded Image" style="width: 100%; height: auto;">
+        </div>
+    </div>
+</div>
+{% endblock %}

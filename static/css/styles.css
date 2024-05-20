@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+    background-color: #121212; /* dark wood color */
+    color: #f5f5dc; /* beige color for text */
+}
+.bg-green-800 {
+    background-color: #3d3d29; /* dark wood color */
+}
+.bg-gray-700, .hover\\:bg-gray-800:hover {
+    background-color: #5a5a30; /* lighter wood color */
+}
+.bg-gray-600, .hover\\:bg-gray-500:hover {
+    background-color: #7a7a52; /* even lighter wood color */
+}
+.text-gray-400 {
+    color: #f5f5dc; /* beige color for text */
+}
+
+
+/* This applies to the entire webpage */
+::-webkit-scrollbar {
+    width: 10px; /* width of the entire scrollbar */
+}
+
+::-webkit-scrollbar-track {
+    background: #3d3d29; /* color of the tracking area */
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #7a7a52; /* color of the scroll thumb */
+    border-radius: 20px; /* roundness of the scroll thumb */
+    border: 3px solid #3d3d29; /* creates padding around scroll thumb */
+}

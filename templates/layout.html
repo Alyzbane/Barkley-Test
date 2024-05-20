@@ -1,0 +1,29 @@
+<!doctype html>
+<html>
+<head>
+    {% block head %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"></link>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <title>{% block title %}{% endblock %} Tree Bark CNN</title>
+    {% endblock %}
+</head>
+<body>
+    {% include 'navbar.html' %}
+    <div id="content">{% block content %}{% endblock %}</div>
+
+    <script>
+        function toggleMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('translate-x-full');
+            menu.classList.toggle('translate-x-0');
+        }
+    </script>
+    <noscript>
+      <h1>You need to enable JavaScript to run this app.</h1>
+    </noscript>
+</body>
+</html>
