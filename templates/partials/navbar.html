@@ -1,0 +1,67 @@
+<div class="max-w-screen flex items-center justify-between mx-auto p-4 bg-[#121212]">
+    <a class="ml-5 text-2xl leading-tight text-center md:mx-6 active md:!text-start flex flex-col items-center" href="/" style="font-weight: 700;">
+        <div>Barkley</div>
+        <div class="text-xs font-normal text-white">Research by CS4</div>
+    </a>
+
+    <!-- Mobile menu button -->
+    <div class="md:hidden flex items-center">
+        <button id="menu-toggle" class="text-white focus:outline-none">
+            <i class="fas fa-bars fa-lg"></i>
+        </button>
+    </div>
+
+    <!-- Navigation links -->
+    <div class="hidden md:flex md:items-center md:space-x-10 ml-auto">
+        <a href="{{ url_for('index') }}" class="hover:underline hover:opacity-70 underline-offset-4 active:bg-transparent hover:bg-transparent font-medium text-base {{ 'active' if request.path == '/' else '' }}" aria-current="page">Home</a>
+        <a href="{{ url_for('demo') }}" class="hover:underline hover:opacity-70 underline-offset-4 active:bg-transparent hover:bg-transparent font-medium text-base {{ 'active' if request.path == '/demo' else '' }}">Demo</a>
+        <a href="{{ url_for('dataset') }}" class="hover:underline hover:opacity-70 underline-offset-4 active:bg-transparent hover:bg-transparent font-medium text-base {{ 'active' if request.path == '/dataset' else '' }}">Datasets</a>
+        <a href="https://www.firstasia.edu.ph/college/" class="flex items-center justify-center">
+            <img src="static/images/logos/faith-logo.png" class="object-contain" width="50" height="50" alt="FAITH Logo">
+        </a>
+    </div>
+
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="fixed inset-0 bg-[#121212] transform -translate-x-full transition-transform duration-300 ease-in-out md:hidden z-50">
+        <div class="flex flex-col h-full">
+            <div class="flex justify-end p-4">
+                <button id="close-menu" class="text-white focus:outline-none">
+                    <i class="fas fa-times fa-lg"></i>
+                </button>
+            </div>
+            <div class="flex-grow flex items-center justify-center">
+                <div class="flex flex-col items-center">
+                    <a href="{{ url_for('index') }}" class="block px-4 py-2 text-white hover:bg-[#1a1a1a] w-full text-center {{ 'underline' if request.path == '/' else '' }}">Home</a>
+                    <a href="{{ url_for('demo') }}" class="block px-4 py-2 text-white hover:bg-[#1a1a1a] w-full text-center {{ 'underline' if request.path == '/demo' else '' }}">Demo</a>
+                    <a href="{{ url_for('dataset') }}" class="block px-4 py-2 text-white hover:bg-[#1a1a1a] w-full text-center {{ 'underline' if request.path == '/dataset' else '' }}">Datasets</a>
+                    <a href="https://www.firstasia.edu.ph/college/" class="block px-4 py-2 hover:bg-[#1a1a1a] w-full flex justify-center">
+                        <img src="static/images/logos/faith-logo.png" class="object-contain" width="30" height="30" alt="FAITH Logo">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    // JavaScript to toggle the mobile menu
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    const closeMenu = document.getElementById('close-menu');
+
+    menuToggle.addEventListener('click', function() {
+        mobileMenu.classList.toggle('-translate-x-full'); // Slide in/out effect
+    });
+
+    closeMenu.addEventListener('click', function() {
+        mobileMenu.classList.add('-translate-x-full'); // Close the menu
+    });
+</script>
+
+
+
+
+
+
+

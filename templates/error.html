@@ -1,0 +1,27 @@
+{% extends "layout.html" %}
+{% block title %} Error {% endblock %}
+{% block head %}
+{{ super() }}
+{% endblock %}
+
+{% block content %}
+    <div class="flex flex-col items-center justify-center min-h-screen">
+       
+        <p>{{ error_message }}</p>
+        <div class="w-full max-w-2xl">
+            {% if image_data %}
+            <img src="data:image/jpeg;base64,{{ image_data }}" alt="Unrecognized Image" class="w-full h-auto max-h-[70vh] object-contain mb-6">
+            {% endif %}
+        </div>
+        <h1 class="text-3xl font-bold text-center text-white-800 mb-4">Error</h1>
+        <div class="flex space-x-4">
+            <button class="flex items-center px-4 py-2 bg-gray-700 rounded hover:bg-yellow-500 transition duration-300">
+                <a href="{{ url_for('demo') }}" class="text-white">
+                    <i class="fas fa-sync-alt mr-2"></i>Go Back
+                </a>
+            </button>
+        </div>
+    </div>
+{% endblock %}
+
+

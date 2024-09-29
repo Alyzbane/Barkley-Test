@@ -1,16 +1,28 @@
+# TODO:
+# Add confidence level
+# Add  oob
+# Add unknown clas (ImageNet?)
+
 from transformers import AutoModelForImageClassification, AutoImageProcessor, pipeline
 import os
+import torch
+import numpy as np
 
-model_checkpoint = r"microsoft/resnet-50"
-model_name = model_checkpoint.split("/")[-1]
-repo_name = "model/resnet-50-finetuned-FBark-1k"
+repo_name = "model/FBark_1k_2e-5"
+device = torch.device('cuda' if torch.cuda.is_available() else "cpu")
 
 if not os.path.exists(repo_name):
     repo_name = "alyzbane/resnet-50-finetuned-FBark-1k"
-    
-model = AutoModelForImageClassification.from_pretrained(repo_name)
+
+model = AutoModelForImageClassification.from_pretrained(repo_name).to(device)
 image_processor = AutoImageProcessor.from_pretrained(repo_name)
-pipe = pipeline("image-classification", model=model, feature_extractor=image_processor)
+
+pipe = pipeline("image-classification", model=model, feature_extractor=image_processor, device=device)
+
+# ======= Boundary for confidence level ==========
+LOW_SCORE_LIMIT=50.0
+
+# ======= Boundary for confidence level ==========
 
 # Dictionary mapping scientific names to common names
 name_mapping = {

@@ -1,0 +1,17 @@
+# Or, if you only want to ignore images within static
+static/images/
+
+# Ignore model files
+model/
+
+# Ignore Python bytecode
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Optionally, you might want to include other common patterns
+*.log
+*.env
+*.DS_Store
+__pycache__/app.cpython-312.pyc

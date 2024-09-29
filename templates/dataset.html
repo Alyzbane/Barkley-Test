@@ -1,0 +1,122 @@
+{% extends "layout.html" %}
+{% block title %} Dataset {% endblock %}
+{% block head %}
+{{ super() }}
+<style>
+  .hidden {
+    display: none;
+  }
+
+  .full-screen-section {
+    position: fixed;
+    inset: 0; /* Full-screen */
+    background-color: #121212; /* Solid dark background */
+    transform: translateY(100%); /* Initially off-screen */
+    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out; /* Smooth transition for both transform and opacity */
+    z-index: 50; /* On top of other elements */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    opacity: 0; /* Start hidden */
+  }
+
+  .full-screen-section.active {
+    transform: translateX(0); /* Slide in */
+    opacity: 1; /* Fade in */
+  }
+
+  .fade-in {
+    opacity: 0;
+    animation: fadeInAnimation 0.5s forwards; /* Fade in effect */
+  }
+
+  @keyframes fadeInAnimation {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .close-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 24px;
+    cursor: pointer;
+  }
+
+  .characteristics {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+    margin: 10px 0;
+  }
+
+  .image-text {
+    font-size: 1rem; /* Adjust as needed */
+    color: #ffffff;
+  }
+
+</style>
+{% endblock %}
+
+{% block content %}
+<!-- Gallery Container -->
+<div class="mx-auto max-w-6xl px-4">
+  <h2 class="text-2xl font-semibold mb-4">Datasets</h2>
+  <div id="gallery-container" class="grid grid-cols-3 gap-2 mt-4">
+    {% for item in items %}
+    <div class="image-container cursor-pointer" onclick="toggleSection('section-{{ loop.index }}')">
+      <img src="{{ url_for('static', filename='images/dataset/' + item.image.path) }}" alt="{{ item.image.alt }}"
+        class="object-cover w-full h-auto" style="max-width: 400px; max-height: 120px;" loading="lazy" />
+      <div class="image-text mt-2">
+        {{ item.title }}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<!-- Full-Screen Sections -->
+{% for item in items %}
+<div id="section-{{ loop.index }}" class="full-screen-section hidden">
+  <button class="close-button" onclick="toggleSection('section-{{ loop.index }}')">&times;</button>
+  <h2 class="text-2xl font-semibold mb-4">{{ item.title }}</h2>
+  <p><strong>Scientific Name:</strong> {{ item.meta.scientific_name }}</p>
+  <p><strong>Common Names:</strong> {{ item.meta.common_names | join(', ') }}</p>
+  <p><strong>Geographic Location:</strong> {{ item.characteristics.geographic_location }}</p>
+  <p><strong>Height:</strong> {{ item.characteristics.height }} ft</p>
+  <p><strong>Trunk Diameter:</strong> {{ item.characteristics.trunk_diameter }} in</p>
+  <p>{{ item.description }}</p>
+</div>
+{% endfor %}
+
+<!-- JavaScript for toggling sections -->
+<script>
+  function toggleSection(id) {
+    const section = document.getElementById(id);
+    
+    // Toggle visibility of the section
+    if (section.classList.contains('active')) {
+      section.classList.remove('active');
+      setTimeout(() => {
+        section.classList.add('hidden'); // Hide after animation
+      }, 500); // Match this duration with the animation duration
+    } else {
+      // Hide all sections before showing the clicked one
+      document.querySelectorAll('.full-screen-section').forEach(sec => {
+        sec.classList.remove('active');
+        sec.classList.add('hidden');
+      });
+      
+      section.classList.remove('hidden');
+      section.classList.add('active', 'fade-in'); // Add fade-in class
+      
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
+</script>
+
+{% endblock %}

@@ -1,0 +1,46 @@
+<div class="flex flex-wrap justify-center items-center bg-[#121212] text-white font-sans">
+    <div class="flex flex-col md:flex-row items-center md:space-x-8">
+        <!-- Upload Form -->
+        <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data" id="uploadForm">
+            <div class="flex flex-col items-center space-y-4">
+                <div class="text-lg">Upload or take a photo</div>
+                <div class="flex space-x-4">
+                    <label for="file" 
+                           class="hover:bg-gray-800 bg-gray-700 w-24 h-24 flex items-center justify-center focus:outline-none">
+                        <i class="fas fa-arrow-up text-gray-400 text-2xl"></i>
+                        <input type="file" id="file" 
+                               accept="image/*"
+                               class="hidden"
+                               name="file">
+                    </label>
+                    
+                    <label for="file"
+                           class="hover:bg-gray-800 bg-gray-700 w-24 h-24 flex items-center justify-center focus:outline-none">
+                        <i class="fas fa-camera text-gray-400 text-2xl"></i>
+                        <input type="file" id="file" 
+                               accept="image/*" 
+                               capture="environment"
+                               class="hidden">
+                    </label>
+                </div>
+            </div>
+        </form>
+
+        <!-- URL Input -->
+        <div class="flex flex-col items-center mt-8 md:mt-12">
+            <div class="flex items-center space-x-2">
+                <form action="{{ url_for('process_url') }}" method="post">
+                    <input type="text" name="image_url" placeholder="Enter image URL" class="bg-gray-700 text-white placeholder-gray-400 px-4 py-2 rounded-l-md focus:outline-none">
+                    <button type="submit" class="bg-gray-600 text-white px-4 py-2 rounded-r-md hover:bg-gray-500 focus:outline-none">
+                        Submit
+                    </button>
+                </form>
+            </div>
+            <div class="text-sm mt-4 text-gray-400">
+                Your image will be uploaded to generate model features.<br>
+                We won't store the image or the features on our servers.
+            </div>
+        </div>
+    </div>
+</div>
+

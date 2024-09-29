@@ -1,62 +1,101 @@
 {% extends "layout.html" %}
 {% block title %}Index {% endblock %}
 {% block head %}
-  {{ super() }}
+{{ super() }}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/spinner.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/lightbox.css') }}">
+
+<style>
+  /* Background dim overlay */
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+    display: none; /* Initially hidden */
+    z-index: 10; /* Make sure it appears below the modal but above the page content */
+}
+
+</style>
+
 {% endblock %}
 
 {% block content %}
-<div class="h-screen mt-20">
-<div class="max-w-[30rem] mx-auto px-2 mb-10 text-center">
-    <h2 class="mb-3 text-4xl text-white">Image Classification</h2>
-    <p class="mb-5 text-gray-400">Barkley can readily be used to identify the following barks: Roystonea regia, Iinstia bijuga, Mangifera indica, Tabebuia and Pterocarpus indicus from a single image.</p>
-</div>
-<div class="flex flex-wrap justify-center items-center bg-[#121212] text-white font-sans">
-    
-    <div class="flex flex-col md:flex-row items-center md:space-x-8">
-        <form action="{{ url_for('upload_file') }}" method="post" enctype="multipart/form-data" id="uploadForm">
-        <div class="flex flex-col items-center space-y-4">
-            <div class="text-lg">Upload or take a photo</div>
-            <div class="flex space-x-4">
-                <label for="file" 
-                        class="hover:bg-gray-800 bg-gray-700 w-24 h-24 flex items-center justify-center focus:outline-none">
-                    <i class="fas fa-arrow-up text-gray-400 text-2xl"></i>
-                    <input type="file" id="file" 
-                            accept=".apng, .blp, .bmp, .bufr, .bw, .cur, .dcx, .dds, .dib, .emf, .eps, .fit, .fits, .flc, .fli, .ftc, .ftu, .gbr, .gif, .grib, .h5, .hdf, .icb, .icns, .ico, .iim, .im, .j2c, .j2k, .jfif, .jp2, .jpc, .jpe, .jpeg, .jpf, .jpg, .jpx, .mpeg, .mpg, .msp, .pbm, .pcd, .pcx, .pgm, .png, .pnm, .ppm, .ps, .psd, .pxr, .qoi, .ras, .rgb, .rgba, .sgi, .tga, .tif, .tiff, .vda, .vst, .webp, .wmf, .xbm, .xpm"
-                            class="hidden"
-                            name="file">
-                </label>
-                
-                <label for="file"
-                        class="hover:bg-gray-800 bg-gray-700 w-24 h-24 flex items-center justify-center focus:outline-none">
-                    <i class="fas fa-camera text-gray-400 text-2xl"></i>
-                    <input type="file" id="file" 
-                            accept=".apng, .blp, .bmp, .bufr, .bw, .cur, .dcx, .dds, .dib, .emf, .eps, .fit, .fits, .flc, .fli, .ftc, .ftu, .gbr, .gif, .grib, .h5, .hdf, .icb, .icns, .ico, .iim, .im, .j2c, .j2k, .jfif, .jp2, .jpc, .jpe, .jpeg, .jpf, .jpg, .jpx, .mpeg, .mpg, .msp, .pbm, .pcd, .pcx, .pgm, .png, .pnm, .ppm, .ps, .psd, .pxr, .qoi, .ras, .rgb, .rgba, .sgi, .tga, .tif, .tiff, .vda, .vst, .webp, .wmf, .xbm, .xpm" 
-                            capture="environment"
-                            class="hidden">
-                </label>
-            </div>
-        </div>
-        </form>
-        <div class="flex flex-col items-center mt-8 md:mt-0">
-            <div class="flex items-center space-x-2">
-                <form action="{{ url_for('process_url') }}" method="post">
-                    <input type="text" name="image_url" placeholder="Enter image URL" class="bg-gray-700 text-white placeholder-gray-400 px-4 py-2 rounded-l-md focus:outline-none">
-                    <button type="submit" class="bg-gray-600 text-white px-4 py-2 rounded-r-md hover:bg-gray-500 focus:outline-none">
-                        Submit
-                    </button>
-                </form>
-            </div>
-            <div class="text-sm mt-4 text-gray-400">
-                Your image will be uploaded to generate model features.<br>
-                We won't store the image or the features on our servers.
-            </div>
-        </div>
+<div class="h-screen">
+
+  <!-- Classification Section -->
+  <div id="image-classification" class="h-min-screen mt-20 mb-20">
+    <div class=" max-w-[30rem] mx-auto px-2 mb-20 text-center">
+      <h2 class="mb-3 text-4xl text-white">Image Classification</h2>
+      <p class="mb-5 text-gray-400">Barkley can readily be used to identify the following barks: Roystonea regia,
+        Iinstia bijuga, Mangifera indica, Tabebuia and Pterocarpus indicus from a single image.</p>
     </div>
+
+    {%include 'partials/classification.html' %}
+    
+    <!-- Spinner HTML -->
+    <div id="loadingSpinner" class="hidden">
+      <div></div>
+    </div>
+  </div>
+
+<!-- Parent container to group h2 and gallery -->
+<div class="mx-auto px-4">
+  <!-- Gallery Header -->
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-2xl font-semibold">
+      &#8595; Select an example image
+    </h2>
+    {% include 'partials/guide.html' %}
+  </div>
+
+  <!-- Gallery Container -->
+  <div id="gallery-container" class="flex flex-wrap justify-start mt-4">
+    <div id="overlay"></div> <!-- This will be the dimming background -->
+    {% for image in image_files %}
+      <form method="post" action="{{ url_for('predict_image', image_name=image) }}" class="relative flex justify-center" style="flex: auto; width: 200px; margin: .5vw;">
+        <button type="submit" style="background: none; border: none; padding: 0; width: 100%;">
+          <div class="image-container w-full flex flex-col items-center overflow-hidden">
+            <img src="{{ url_for('static', filename='images/' + image) }}" 
+              alt="{{ image }}" 
+              class="object-cover w-full h-auto"
+              style="width: 100%; height: auto;" />
+          </div>
+        </button>
+      </form>
+    {% endfor %}
+  </div>
 </div>
+
 </div>
+
+
+<script type='text/javascript' src="{{ url_for('static', filename='js/upload.js') }}"></script>
+<script type='text/javascript' src="{{ url_for('static', filename='js/lazy_loading.js') }}"></script>
+
 <script>
-document.getElementById('file').addEventListener('change', function() {
-    document.getElementById('uploadForm').submit();
-});
+  const helpButton = document.getElementById('helpButton');
+  const helpDialog = document.getElementById('helpDialog');
+
+
+  helpButton.addEventListener('click', () => {
+    overlay.style.display = "block";
+    document.body.style.overflow = 'hidden';  // Disable page scrolling
+    helpDialog.showModal();
+  });
+
+  helpDialog.addEventListener('show', () => {
+    document.body.style.overflow = 'hidden';  // Disable page scrolling
+  });
+
+  helpDialog.addEventListener('close', () => {
+    overlay.style.display = "none";
+    document.body.style.overflow = '';  // Enable page scrolling when the modal is closed
+  });
+
 </script>
+
+
 {% endblock %}

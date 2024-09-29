@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Input Form</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 p-10">
+    <h1 class="text-2xl font-bold mb-5">Add New Bark Item</h1>
+    <form id="barkForm" class="bg-white p-5 rounded shadow-md">
+        <div class="mb-4">
+            <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
+            <input type="text" id="title" name="title" required class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
+        </div>
+        <div class="mb-4">
+            <label for="imageFile" class="block text-sm font-medium text-gray-700">Image File</label>
+            <input type="file" id="imageFile" name="imageFile" accept="image/*" required class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
+        </div>
+        <div class="mb-4">
+            <label for="scientificName" class="block text-sm font-medium text-gray-700">Scientific Name</label>
+            <input type="text" id="scientificName" name="scientificName" required class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
+        </div>
+        <div class="mb-4">
+            <label for="commonNames" class="block text-sm font-medium text-gray-700">Common Names (comma separated)</label>
+            <input type="text" id="commonNames" name="commonNames" required class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
+        </div>
+        <div class="mb-4">
+            <label for="color" class="block text-sm font-medium text-gray-700">Color (comma separated)</label>
+            <input type="text" id="color" name="color" required class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
+        </div>
+        <div class="mb-4">
+            <label for="texture" class="block text-sm font-medium text-gray-700">Texture (comma separated)</label>
+            <input type="text" id="texture" name="texture" required class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
+        </div>
+        <div class="mb-4">
+            <label for="geographicLocation" class="block text-sm font-medium text-gray-700">Geographic Location</label>
+            <select id="geographicLocation" name="geographicLocation" required class="mt-1 block w-full border border-gray-300 rounded-md p-2">
+                    <option value="" disabled selected>Select a region</option>
+                    <option value="Northern Africa">Northern Africa</option>
+                    <option value="Sub-Saharan Africa">Sub-Saharan Africa</option>
+                    <option value="West Africa">West Africa</option>
+                    <option value="East Africa">East Africa</option>
+                    <option value="Central Africa">Central Africa</option>
+                    <option value="Southern Africa">Southern Africa</option>
+                    <option value="North America">North America</option>
+                    <option value="Central America">Central America</option>
+                    <option value="South America">South America</option>
+                    <option value="Caribbean">Caribbean</option>
+                    <option value="East Asia">East Asia</option>
+                    <option value="Southeast Asia">Southeast Asia</option>
+                    <option value="South Asia">South Asia</option>
+                    <option value="Central Asia">Central Asia</option>
+                    <option value="Western Asia">Western Asia (Middle East)</option>
+                    <option value="Northern Europe">Northern Europe</option>
+                    <option value="Southern Europe">Southern Europe</option>
+                    <option value="Eastern Europe">Eastern Europe</option>
+                    <option value="Western Europe">Western Europe</option>
+                    <option value="Australia and New Zealand">Australia and New Zealand</option>
+                    <option value="Melanesia">Melanesia</option>
+                    <option value="Micronesia">Micronesia</option>
+                    <option value="Polynesia">Polynesia</option>
+            </select>
+        </div>
+        <div class="mb-4">
+            <label for="height" class="block text-sm font-medium text-gray-700">Tree Height (in feet, range 1-10)</label>
+            <input type="text" id="heightRange" name="heightRange" placeholder="Height range in feet (e.g., 1-10)" required class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
+        </div>
+        <div class="mb-4">
+            <label for="trunkDiameter" class="block text-sm font-medium text-gray-700">Trunk Diameter (in inches, range 1-10)</label>
+            <input type="text" id="trunkDiameterRange" name="trunkDiameterRange" placeholder="Diameter range in inches (e.g., 1-10)" required class="mt-1 block w-full border border-gray-300 rounded-md p-2" />
+        </div>
+        <div class="mb-4">
+            <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+            <textarea id="description" name="description" required class="mt-1 block w-full border border-gray-300 rounded-md p-2"></textarea>
+        </div>
+        <button type="submit" class="w-full bg-blue-500 text-white font-semibold p-2 rounded hover:bg-blue-600">Add Item</button>
+    </form>
+
+    <button id="downloadJson" class="mt-5 w-full bg-green-500 text-white font-semibold p-2 rounded hover:bg-green-600">Download JSON</button>
+
+    <script>
+        const items = [];
+
+        document.getElementById('barkForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Prevent form submission for demonstration
+            
+            const formData = new FormData(event.target);
+            const fileInput = document.getElementById('imageFile');
+            const imagePath = fileInput.files[0] ? fileInput.files[0].name : '';
+
+            const item = {
+                title: formData.get('title'),
+                image: {
+                    path: imagePath, // Use the selected file's name for the relative path
+                    alt: formData.get('title')
+                },
+                meta: {
+                    scientific_name: formData.get('scientificName'),
+                    common_names: formData.get('commonNames').split(',').map(c => c.trim()), // Split and trim common names
+                },
+                characteristics: {
+                    color: formData.get('color').split(',').map(c => c.trim()), // Split and trim colors
+                    texture: formData.get('texture').split(',').map(t => t.trim()), // Split and trim textures
+                    geographic_location: formData.get('geographicLocation'), // Geographic Location
+                    height: formData.get('heightRange'), // Tree height range in feet
+                    trunk_diameter: formData.get('trunkDiameterRange') // Trunk diameter range in inches
+                },
+                description: formData.get('description')
+            };
+
+            items.push(item); // Add the item to the array
+            event.target.reset(); // Reset the form
+            console.log(items); // Log the accumulated items (for demonstration)
+        });
+
+        document.getElementById('downloadJson').addEventListener('click', function() {
+            const jsonBlob = new Blob([JSON.stringify({ items: items }, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(jsonBlob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'bark_items.json'; // Set the desired file name
+            document.body.appendChild(a);
+            a.click(); // Trigger the download
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url); // Clean up
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+{
+  "items": [
+    {
+      "title": "Narra",
+      "image": {
+        "path": "narra.jpg",
+        "alt": "Narra"
+      },
+      "meta": {
+        "scientific_name": "Pterocarpus indicus",
+        "common_names": [
+          "Narra",
+          "Amboyna (burl)"
+        ]
+      },
+      "characteristics": {
+        "color": [
+          "golden yellow",
+          "reddish brown",
+          "pale yellow"
+        ],
+        "texture": [
+          "uneven medium",
+          "coarse"
+        ],
+        "geographic_location": "South Asia",
+        "height": "65-100",
+        "trunk_diameter": "3-5"
+      },
+      "description": "This wood has a seeming split personality. One the one hand there is the humble Narra, with good workability and dimensional stability (much like other members of the Pterocarpus genus)—on the other hand there is the exotic and highly-prized burl wood known as Amboyna. Both come from the same tree (Pterocarpus indicus), though the resemblance between the two is virtually unrecognizable."
+    },
+    {
+      "title": "Royal Palm",
+      "image": {
+        "path": "royal_palm.jpg",
+        "alt": "Royal Palm"
+      },
+      "meta": {
+        "scientific_name": "Roystonea regia",
+        "common_names": [
+          "Royal palm",
+          "Cuban royal palm",
+          "Florida royal palm"
+        ]
+      },
+      "characteristics": {
+        "color": [
+          "grey-white",
+          "green (younger trees)"
+        ],
+        "texture": [
+          "smooth",
+          "cylindrical",
+          "glossy"
+        ],
+        "geographic_location": "Central America",
+        "height": "50-80",
+        "trunk_diameter": "24"
+      },
+      "description": "A large and attractive palm, it has been planted throughout the tropics and subtropics as an ornamental tree. Although it is sometimes called R. elata, the conserved name R. regia is now the correct name for the species. "
+    }
+  ]
+}
