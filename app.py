@@ -98,7 +98,8 @@ def upload_file():
     predictions = predict(preview_image)
 
     data = io.BytesIO()
-    preview_image.save(data, "JPEG")
+    preview_image.save(data, format="JPEG", quality=70)
+
     image_data = base64.b64encode(data.getvalue())
 
     if all_scores_below_threshold(predictions, PREDICTION_THRESHOLD):
@@ -127,7 +128,7 @@ def process_url():
     predictions = predict(image)
 
     data = io.BytesIO()
-    image.save(data, "JPEG")
+    image.save(data, format="JPEG", quality=70)
     image_data = base64.b64encode(data.getvalue())
 
     if all_scores_below_threshold(predictions, PREDICTION_THRESHOLD):
@@ -153,7 +154,7 @@ def predict_image(image_name):
     predictions = predict(preview_image)
 
     data = io.BytesIO()
-    preview_image.save(data, "JPEG")
+    preview_image.save(data, format="JPEG", quality=70)
     image_data = base64.b64encode(data.getvalue())
 
     if all_scores_below_threshold(predictions, PREDICTION_THRESHOLD):

@@ -58,6 +58,95 @@
         "trunk_diameter": "24"
       },
       "description": "A large and attractive palm, it has been planted throughout the tropics and subtropics as an ornamental tree. Although it is sometimes called R. elata, the conserved name R. regia is now the correct name for the species. "
+    },
+    {
+      "title": "Mango",
+      "image": {
+        "path": "mango.jpg",
+        "alt": "Mango"
+      },
+      "meta": {
+        "scientific_name": "Mangifera indica",
+        "common_names": [
+          "Mango"
+        ]
+      },
+      "characteristics": {
+        "color": [
+          "light brown",
+          "dark brown"
+        ],
+        "texture": [
+          "cracked",
+          "thick",
+          "rough"
+        ],
+        "geographic_location": "Southeast Asia",
+        "height": "50-100",
+        "trunk_diameter": "3.7"
+      },
+      "description": "The mango tree originated in the Indo-Burma region, extending from eastern India and southern China across Southeast Asia. It was introduced to the Western world by the Portuguese in 1498 and later introduced to Brazil in 1700 and the United States in Florida in 1796."
+    },
+    {
+      "title": "Ipil",
+      "image": {
+        "path": "ipil.jpg",
+        "alt": "Ipil"
+      },
+      "meta": {
+        "scientific_name": "Intsia bijuga",
+        "common_names": [
+          "Ipil",
+          "Borneo teak",
+          "Johnstone River teak",
+          "Kwila",
+          "Moluccan ironwood",
+          "Pacific teak",
+          "Scrub Mahogany",
+          "Vesi"
+        ]
+      },
+      "characteristics": {
+        "color": [
+          "whitish brown"
+        ],
+        "texture": [
+          "coarse",
+          "grain straight or interlocked"
+        ],
+        "geographic_location": "Southeast Asia",
+        "height": "160",
+        "trunk_diameter": "78.74016"
+      },
+      "description": "The bark and leaves of the ipil are used in traditional medicines. The tree's timber, called kwila (taal in the Philippines, merbau in Australia, vengai in Tamil Nadu and South India), is a very durable and termite-resistant wood, making it a highly valued material for flooring and other uses. The wood can also be used to extract a dye. The tree can contain a \"gold\" fleck that runs through the grain, considered to be attractive by some. Due to extensive logging of the tree, it is endangered in many places in Southeast Asia."
+    },
+    {
+      "title": "Trumpet",
+      "image": {
+        "path": "trumpet.jpg",
+        "alt": "Trumpet"
+      },
+      "meta": {
+        "scientific_name": "Tabebuia",
+        "common_names": [
+          "Trumpet"
+        ]
+      },
+      "characteristics": {
+        "color": [
+          "gray",
+          "brown"
+        ],
+        "texture": [
+          "rough",
+          "deep grooves",
+          "raised ridges"
+        ],
+        "geographic_location": "Central America",
+        "height": "15-30",
+        "trunk_diameter": "472.4409"
+      },
+      "description": "Tabebuia is a genus of flowering plants in the family Bignoniaceae.Tabebuia consists almost entirely of trees, but a few are often large shrubs. A few species produce timber, but the genus is mostly known for those that are cultivated as flowering trees. Tabebuia species have twigs with soft pith which forms hollows within which ants live, defending the trees from other herbivores. The ants are attracted to the plants by special extra-floral nectar glands on at the apex of the petioles. Tabebuias have been called \"trumpet trees\", but this name is usually applied to other trees and has become a source of confusion and misidentification."
     }
   ]
 }
