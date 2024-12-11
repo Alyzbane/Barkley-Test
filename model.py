@@ -1,9 +1,9 @@
 from transformers import AutoModelForImageClassification, AutoImageProcessor, pipeline
 import torch
 
-repo_name = "model/new/ConvNeXT"
-repo_name = "model/new/ResNet-50"
-# repo_name = "model/new/Swin-base-patch4-window7"
+# repo_name = "model/new/ConvNeXT"
+repo_name = "model/ResNet-50"
+repo_name = "model/new/Swin-base-patch4-window7"
 # repo_name = "model/new/ViT-base-patch16"
 
 device = torch.device('cuda' if torch.cuda.is_available() else "cpu")
@@ -26,8 +26,17 @@ def predict(image):
     for prediction in predictions:
         prediction['score'] = round(prediction['score'] * 100, 3)  # limiting to 3 decimal places
         scientific_name = prediction['label']
-        common_name = name_mapping.get(scientific_name, "Unknown")
+        
+        # Update scientific name display
+        if scientific_name == "Iinstia bijuga":
+            scientific_name = "Cananga odorata"
+        
+        # Get the common name from the mapping
+        common_name = name_mapping.get(prediction['label'], "Unknown")
+        
+        # Update the prediction dictionary
         prediction['scientific_name'] = scientific_name
         prediction['common_name'] = common_name
 
-    return predictions  # return the predictions with scientific and common names
+    return predictions
+
