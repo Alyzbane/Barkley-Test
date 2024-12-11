@@ -1,7 +1,11 @@
 from transformers import AutoModelForImageClassification, AutoImageProcessor, pipeline
 import torch
 
-repo_name = "alyzbane/barkley-vit-5C"
+repo_name = "model/new/ConvNeXT"
+repo_name = "model/new/ResNet-50"
+# repo_name = "model/new/Swin-base-patch4-window7"
+# repo_name = "model/new/ViT-base-patch16"
+
 device = torch.device('cuda' if torch.cuda.is_available() else "cpu")
 
 model = AutoModelForImageClassification.from_pretrained(repo_name).to(device)
@@ -14,7 +18,7 @@ name_mapping = {
     "Pterocarpus indicus": "Narra",
     "Tabebuia": "Trumpet Tree",
     "Mangifera indica": "Mango Tree",
-    "Iinstia bijuga": "Ipil Tree"
+    "Iinstia bijuga": "Ilang-ilang Tree"
 }
 
 def predict(image):

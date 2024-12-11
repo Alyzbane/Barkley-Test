@@ -2,64 +2,7 @@
 {% block title %} Dataset {% endblock %}
 {% block head %}
 {{ super() }}
-<style>
-  .hidden {
-    display: none;
-  }
 
-  .full-screen-section {
-    position: fixed;
-    inset: 0; /* Full-screen */
-    background-color: #121212; /* Solid dark background */
-    transform: translateY(100%); /* Initially off-screen */
-    transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out; /* Smooth transition for both transform and opacity */
-    z-index: 50; /* On top of other elements */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    opacity: 0; /* Start hidden */
-  }
-
-  .full-screen-section.active {
-    transform: translateX(0); /* Slide in */
-    opacity: 1; /* Fade in */
-  }
-
-  .fade-in {
-    opacity: 0;
-    animation: fadeInAnimation 0.5s forwards; /* Fade in effect */
-  }
-
-  @keyframes fadeInAnimation {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
-
-  .close-button {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    background: none;
-    border: none;
-    color: white;
-    font-size: 24px;
-    cursor: pointer;
-  }
-
-  .characteristics {
-    display: flex;
-    justify-content: space-between;
-    font-weight: bold;
-    margin: 10px 0;
-  }
-
-  .image-text {
-    font-size: 1rem; /* Adjust as needed */
-    color: #ffffff;
-  }
-
-</style>
 {% endblock %}
 
 {% block content %}
@@ -68,7 +11,7 @@
   <h2 class="text-2xl font-semibold mb-4">Datasets</h2>
   <div id="gallery-container" class="grid grid-cols-3 gap-2 mt-4">
     {% for item in items %}
-    <div class="image-container cursor-pointer" onclick="toggleSection('section-{{ loop.index }}')">
+    <div class="image-container cursor-pointer" onclick="openDrawer(`{{ loop.index }}`, `{{ item.title }}`, `{{ url_for('static', filename='images/dataset/' + item.image.path) }}`, `{{ item.meta.scientific_name }}`, `{{ item.meta.common_names | join(', ') }}`, `{{ item.characteristics.geographic_location }}`, `{{ item.characteristics.height }}`, `{{ item.characteristics.trunk_diameter }}`, `{{ item.description | escape }}`)">
       <img src="{{ url_for('static', filename='images/dataset/' + item.image.path) }}" alt="{{ item.image.alt }}"
         class="object-cover w-full h-auto" style="max-width: 400px; max-height: 120px;" loading="lazy" />
       <div class="image-text mt-2">
@@ -78,45 +21,91 @@
     {% endfor %}
   </div>
 </div>
-
-<!-- Full-Screen Sections -->
-{% for item in items %}
-<div id="section-{{ loop.index }}" class="full-screen-section hidden">
-  <button class="close-button" onclick="toggleSection('section-{{ loop.index }}')">&times;</button>
-  <h2 class="text-2xl font-semibold mb-4">{{ item.title }}</h2>
-  <p><strong>Scientific Name:</strong> {{ item.meta.scientific_name }}</p>
-  <p><strong>Common Names:</strong> {{ item.meta.common_names | join(', ') }}</p>
-  <p><strong>Geographic Location:</strong> {{ item.characteristics.geographic_location }}</p>
-  <p><strong>Height:</strong> {{ item.characteristics.height }} ft</p>
-  <p><strong>Trunk Diameter:</strong> {{ item.characteristics.trunk_diameter }} in</p>
-  <p>{{ item.description }}</p>
-</div>
-{% endfor %}
-
-<!-- JavaScript for toggling sections -->
-<script>
-  function toggleSection(id) {
-    const section = document.getElementById(id);
+<!-- Full-Screen Drawer -->
+<div id="drawer" class="fixed inset-0 z-50 hidden bg-black bg-opacity-90 transition-opacity duration-300 ease-in-out">
+  <div class="bg-black text-white p-6 h-full overflow-y-auto transform translate-y-full transition-transform duration-300 ease-in-out">
     
-    // Toggle visibility of the section
-    if (section.classList.contains('active')) {
-      section.classList.remove('active');
-      setTimeout(() => {
-        section.classList.add('hidden'); // Hide after animation
-      }, 500); // Match this duration with the animation duration
-    } else {
-      // Hide all sections before showing the clicked one
-      document.querySelectorAll('.full-screen-section').forEach(sec => {
-        sec.classList.remove('active');
-        sec.classList.add('hidden');
-      });
-      
-      section.classList.remove('hidden');
-      section.classList.add('active', 'fade-in'); // Add fade-in class
-      
-      section.scrollIntoView({ behavior: 'smooth' });
-    }
+    <!-- Close Button -->
+    <button class="absolute top-4 right-4 text-gray-300 hover:text-white" onclick="closeDrawer()">
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+      </svg>
+      <span class="sr-only">Close Drawer</span>
+    </button>
+
+    <!-- Drawer Content -->
+    <div class="flex flex-col md:flex-row h-full">
+      <!-- Image Section -->
+      <div class="w-full md:w-1/2 flex justify-center items-center p-2">
+        <img id="drawer-image" src="" alt="Tree Image" class="w-full h-full object-cover rounded-lg shadow-md" />
+      </div>
+
+      <!-- Text Section -->
+      <div class="md:w-1/2 md:pl-4 flex flex-col justify-between p-4">
+        <h2 id="drawer-title" class="text-4xl font-bold mb-2 text-white leading-tight"></h2>
+        <p id="drawer-description" class="text-gray-300 mb-4 leading-relaxed text-lg flex-grow"></p>
+
+        <!-- Grouped Elements -->
+        <div class="grid grid-cols-1 gap-4">
+          <div class="flex items-left">
+            <span class="font-bold text-lg text-white">🌱 Scientific Name:</span>
+            <span id="drawer-scientific-name" class="ml-2 text-gray-300"></span>
+          </div>
+          <div class="flex items-left">
+            <span class="font-bold text-lg text-white">🌿 Common Names:</span>
+            <span id="drawer-common-names" class="ml-2 text-gray-300"></span>
+          </div>
+          <div class="flex items-left">
+            <span class="font-bold text-lg text-white">📍 Geographic Location:</span>
+            <span id="drawer-geographic-location" class="ml-2 text-gray-300"></span>
+          </div>
+          <div class="flex items-left">
+            <span class="font-bold text-lg text-white">📏 Height:</span>
+            <span id="drawer-height" class="ml-2 text-gray-300"></span> ft
+          </div>
+          <div class="flex items-left">
+            <span class="font-bold text-lg text-white">🌳 Trunk Diameter:</span>
+            <span id="drawer-trunk-diameter" class="ml-2 text-gray-300"></span> in
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- JavaScript Functions -->
+<script>
+  function openDrawer(index, title, image, scientificName, commonNames, geographicLocation, height, trunkDiameter, description) {
+    // Set the drawer content
+    document.getElementById('drawer-title').innerText = title;
+    document.getElementById('drawer-image').src = image;
+    document.getElementById('drawer-scientific-name').innerText = scientificName;
+    document.getElementById('drawer-common-names').innerText = commonNames;
+    document.getElementById('drawer-geographic-location').innerText = geographicLocation;
+    document.getElementById('drawer-height').innerText = height;
+    document.getElementById('drawer-trunk-diameter').innerText = trunkDiameter;
+    document.getElementById('drawer-description').innerText = description;
+
+    // Show the drawer
+    document.getElementById('drawer').classList.remove('hidden');
+    setTimeout(() => {
+      document.getElementById('drawer').firstElementChild.classList.remove('translate-y-full');
+    }, 10); // Add a slight delay to allow the drawer to be displayed before animating
+  }
+
+  function closeDrawer() {
+    const drawer = document.getElementById('drawer');
+    const drawerContent = drawer.firstElementChild;
+
+    drawerContent.classList.add('translate-y-full');
+    setTimeout(() => {
+      drawer.classList.add('hidden');
+    }, 300); // Match the duration with the CSS transition time
   }
 </script>
+
+
 
 {% endblock %}

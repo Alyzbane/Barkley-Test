@@ -17,6 +17,11 @@ from flask import Flask, render_template, request, redirect, url_for, session, c
 from model import predict
 from PIL import Image
 
+##########################
+### Local directories ###
+##########################
+from utils.images import CAROUSEL
+
 app = Flask(__name__, static_folder="static")
 
 # Generate a secure random key for session management
@@ -46,26 +51,51 @@ def index():
 ########################################################
 ### Classification demonstration with inputs example ###
 ########################################################
-
-@app.route('/demo')
+@app.route('/demo', methods=['GET', 'POST'])
 def demo():
     # Get the list of images from the static/images folder
-    image_folder = os.path.join(app.static_folder, 'images')
+    image_folder = os.path.join(app.static_folder, r'images/demos')
     
-    # Ensure the folder exists and contains files
     if not os.path.exists(image_folder):
         return "No image folder found", 500
     
     # List all image files
     image_files = [f for f in os.listdir(image_folder) if os.path.isfile(os.path.join(image_folder, f))][:20]
+    
+    # Extract unique classes from filenames
+    unique_classes = set(image.split('_')[0] for image in image_files)
+
+    # Filter images if a class is specified
+    selected_class = request.args.get('class')
+    if selected_class:
+        image_files = [image for image in image_files if image.startswith(selected_class)]
+    
     random.shuffle(image_files)
 
-    # Ensure that image_files is not empty
     if not image_files:
         return "No images found in the static/images folder", 500
     
-    # Pass image files to the template
-    return render_template('demo.html', image_files=image_files)
+    # Pass image files and unique classes to the template
+    return render_template('demo.html', image_files=image_files, unique_classes=unique_classes)
+# @app.route('/demo')
+# def demo():
+#     # Get the list of images from the static/images folder
+#     image_folder = os.path.join(app.static_folder, r'images/demos')
+    
+#     # Ensure the folder exists and contains files
+#     if not os.path.exists(image_folder):
+#         return "No image folder found", 500
+    
+#     # List all image files
+#     image_files = [f for f in os.listdir(image_folder) if os.path.isfile(os.path.join(image_folder, f))][:20]
+#     random.shuffle(image_files)
+
+#     # Ensure that image_files is not empty
+#     if not image_files:
+#         return "No images found in the static/images folder", 500
+    
+#     # Pass image files to the template
+#     return render_template('demo.html', image_files=image_files)
 
 ######################################
 ### Displaying dataset information ###
@@ -103,7 +133,7 @@ def upload_file():
     image_data = base64.b64encode(data.getvalue())
 
     if all_scores_below_threshold(predictions, PREDICTION_THRESHOLD):
-        return render_template('error.html', image_data=image_data.decode('utf-8'))
+        return render_template('error.html', image_data=image_data.decode('utf-8'), predictions=predictions, carousel=CAROUSEL)
 
     return render_template('result.html',
                            image_data=image_data.decode('utf-8'),
@@ -132,7 +162,7 @@ def process_url():
     image_data = base64.b64encode(data.getvalue())
 
     if all_scores_below_threshold(predictions, PREDICTION_THRESHOLD):
-        return render_template('error.html', image_data=image_data.decode('utf-8'))
+        return render_template('error.html', image_data=image_data.decode('utf-8'), predictions=predictions, carousel=CAROUSEL)
 
     return render_template('result.html',
                            image_data=image_data.decode('utf-8'),
@@ -145,7 +175,7 @@ def process_url():
 
 @app.route('/predict/<image_name>', methods=['POST'])
 def predict_image(image_name):
-    image_path = os.path.join(app.static_folder, 'images', image_name)
+    image_path = os.path.join(app.static_folder, 'images/demos', image_name)
     
     if not os.path.exists(image_path):
         return "Image not found", 404
@@ -158,7 +188,7 @@ def predict_image(image_name):
     image_data = base64.b64encode(data.getvalue())
 
     if all_scores_below_threshold(predictions, PREDICTION_THRESHOLD):
-        return render_template('error.html', image_data=image_data.decode('utf-8'))
+        return render_template('error.html', image_data=image_data.decode('utf-8'), predictions=predictions, carousel=CAROUSEL)
 
     # Store data in a temporary file
     temp_file = tempfile.NamedTemporaryFile(delete=False, suffix='.pkl')

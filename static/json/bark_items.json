@@ -27,7 +27,7 @@
         "height": "65-100",
         "trunk_diameter": "3-5"
       },
-      "description": "This wood has a seeming split personality. One the one hand there is the humble Narra, with good workability and dimensional stability (much like other members of the Pterocarpus genus)—on the other hand there is the exotic and highly-prized burl wood known as Amboyna. Both come from the same tree (Pterocarpus indicus), though the resemblance between the two is virtually unrecognizable."
+      "description": "This wood has a seeming split personality. One the one hand there is the humble Narra, with good workability and dimensional stability (much like other members of the Pterocarpus genus). On the other hand there is the exotic and highly-prized burl wood known as Amboyna. Both come from the same tree (Pterocarpus indicus), though the resemblance between the two is virtually unrecognizable."
     },
     {
       "title": "Royal Palm",
@@ -57,7 +57,7 @@
         "height": "50-80",
         "trunk_diameter": "24"
       },
-      "description": "A large and attractive palm, it has been planted throughout the tropics and subtropics as an ornamental tree. Although it is sometimes called R. elata, the conserved name R. regia is now the correct name for the species. "
+      "description": "A large and attractive palm, it has been planted throughout the tropics and subtropics as an ornamental tree. Although it is sometimes called Roystonea elata, the conserved name Roystonea regia is now the correct name for the species. "
     },
     {
       "title": "Mango",
@@ -88,22 +88,21 @@
       "description": "The mango tree originated in the Indo-Burma region, extending from eastern India and southern China across Southeast Asia. It was introduced to the Western world by the Portuguese in 1498 and later introduced to Brazil in 1700 and the United States in Florida in 1796."
     },
     {
-      "title": "Ipil",
+      "title": "Ilang - Ilang",
       "image": {
-        "path": "ipil.jpg",
-        "alt": "Ipil"
+        "path": "ilang ilang.jpg",
+        "alt": "Ilang - Ilang"
       },
       "meta": {
-        "scientific_name": "Intsia bijuga",
+        "scientific_name": "Cananga odorata",
         "common_names": [
-          "Ipil",
-          "Borneo teak",
-          "Johnstone River teak",
-          "Kwila",
-          "Moluccan ironwood",
-          "Pacific teak",
-          "Scrub Mahogany",
-          "Vesi"
+          "Ilang - ilang",
+          "ylang - ylang",
+          "Cananga Tree",
+          "Fragrant Cananga",
+          "Macassar oil plant",
+          "Perfume Tree",
+          "Queen of Perfumes"
         ]
       },
       "characteristics": {
@@ -111,14 +110,13 @@
           "whitish brown"
         ],
         "texture": [
-          "coarse",
-          "grain straight or interlocked"
+          "coarse"
         ],
         "geographic_location": "Southeast Asia",
-        "height": "160",
-        "trunk_diameter": "78.74016"
+        "height": "131.234",
+        "trunk_diameter": "1.47638"
       },
-      "description": "The bark and leaves of the ipil are used in traditional medicines. The tree's timber, called kwila (taal in the Philippines, merbau in Australia, vengai in Tamil Nadu and South India), is a very durable and termite-resistant wood, making it a highly valued material for flooring and other uses. The wood can also be used to extract a dye. The tree can contain a \"gold\" fleck that runs through the grain, considered to be attractive by some. Due to extensive logging of the tree, it is endangered in many places in Southeast Asia."
+      "description": "The flowers of the ilang-ilang tree are highly valued for their fragrant essential oil, which is widely used in perfumery and aromatherapy. The tree's timber, although not as commonly used as its flowers, can be utilized for light construction and carving. Ilang-ilang is also significant in traditional medicine, with its flowers and leaves used to treat various ailments such as fever, skin infections, and stress. The tree produces long, drooping clusters of yellow-green flowers that emit a distinct, sweet fragrance. Due to overharvesting for its essential oil, as well as habitat loss, ilang-ilang is becoming less common in its natural habitats across Southeast Asia."
     },
     {
       "title": "Trumpet",

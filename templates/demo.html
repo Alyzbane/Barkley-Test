@@ -7,17 +7,19 @@
 
 <style>
   /* Background dim overlay */
-#overlay {
+  #overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
-    display: none; /* Initially hidden */
-    z-index: 10; /* Make sure it appears below the modal but above the page content */
-}
-
+    background-color: rgba(0, 0, 0, 0.5);
+    /* Semi-transparent black */
+    display: none;
+    /* Initially hidden */
+    z-index: 10;
+    /* Make sure it appears below the modal but above the page content */
+  }
 </style>
 
 {% endblock %}
@@ -30,44 +32,65 @@
     <div class=" max-w-[30rem] mx-auto px-2 mb-20 text-center">
       <h2 class="mb-3 text-4xl text-white">Image Classification</h2>
       <p class="mb-5 text-gray-400">Barkley can readily be used to identify the following barks: Roystonea regia,
-        Iinstia bijuga, Mangifera indica, Tabebuia and Pterocarpus indicus from a single image.</p>
+        Cananga odorata, Mangifera indica, Tabebuia and Pterocarpus indicus from a single image.</p>
     </div>
 
     {%include 'partials/classification.html' %}
-    
+
     <!-- Spinner HTML -->
     <div id="loadingSpinner" class="hidden">
       <div></div>
     </div>
   </div>
 
-<!-- Parent container to group h2 and gallery -->
-<div class="mx-auto px-4">
-  <!-- Gallery Header -->
-  <div class="flex justify-between items-center mb-4">
-    <h2 class="text-2xl font-semibold">
-      &#8595; Select an example image
-    </h2>
-    {% include 'partials/guide.html' %}
-  </div>
+  <!-- Parent container to group h2 and gallery -->
+  <div class="mx-auto px-4">
+    <!-- Gallery Header -->
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-2xl font-semibold">
+        &#8595; Select an example image
+      </h2>
+      {% include 'partials/guide.html' %}
+    </div>
 
-  <!-- Gallery Container -->
-  <div id="gallery-container" class="flex flex-wrap justify-start mt-4">
-    <div id="overlay"></div> <!-- This will be the dimming background -->
-    {% for image in image_files %}
-      <form method="post" action="{{ url_for('predict_image', image_name=image) }}" class="relative flex justify-center" style="flex: auto; width: 200px; margin: .5vw;">
-        <button type="submit" style="background: none; border: none; padding: 0; width: 100%;">
-          <div class="image-container w-full flex flex-col items-center overflow-hidden">
-            <img src="{{ url_for('static', filename='images/' + image) }}" 
-              alt="{{ image }}" 
-              class="object-cover w-full h-auto"
-              style="width: 100%; height: auto;" />
+<!-- Filter Buttons -->
+<div class="flex flex-wrap justify-center mb-4">
+  {% for class_name in unique_classes %}
+  <button onclick="filterImages('{{ class_name }}')"
+    class="bg-transparent border border-gray-300 rounded-md px-4 py-2 mx-2 mb-2 sm:mb-0 hover:bg-gray-200 transition duration-200 ease-in-out">
+    {{ class_name }}
+  </button>
+  {% endfor %}
+  <button onclick="filterImages('all')"
+    class="bg-transparent border border-gray-300 rounded-md px-4 py-2 mx-2 mb-2 sm:mb-0 hover:bg-gray-200 transition duration-200 ease-in-out">
+    Show All
+  </button>
+</div>
+
+
+    <!-- Gallery Container -->
+    <div id="gallery-container" class="flex flex-wrap justify-start mt-4">
+      <div id="overlay"></div>
+      {% for image in image_files %}
+      <form method="post" action="{{ url_for('predict_image', image_name=image) }}" class="relative flex justify-center"
+        style="flex: auto; width: 200px; margin: .1vw;" data-class="{{ image.split('_')[0] }}">
+        <button type="submit" class="focus:outline-none hover:bg-gray-200 transition duration-200 ease-in-out"
+          style="padding: 0; width: 100%;">
+          <div class="image-container w-full flex flex-col items-center overflow-hidden relative group">
+            <img src="{{ url_for('static', filename='images/demos/' + image) }}" alt="{{ image }}"
+              class="object-cover w-full h-auto" />
+            <!-- Popup text that appears on hover -->
+            <div class="absolute bottom-0 bg-black bg-opacity-75 text-white text-sm px-2 py-1 w-full text-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+              {{ image.split('_')[0] }}
+            </div>
           </div>
         </button>
       </form>
-    {% endfor %}
+      {% endfor %}
+    </div>
+    
+    
   </div>
-</div>
 
 </div>
 
@@ -94,6 +117,23 @@
     overlay.style.display = "none";
     document.body.style.overflow = '';  // Enable page scrolling when the modal is closed
   });
+  //JavaScript for Filtering -->
+
+  function filterImages(className) {
+    const images = document.querySelectorAll('#gallery-container form');
+
+    images.forEach((image) => {
+      // Get the data-class attribute value
+      const imageClass = image.getAttribute('data-class');
+
+      // Show or hide images based on the selected class
+      if (className === 'all' || imageClass === className) {
+        image.style.display = 'block'; // Show the image
+      } else {
+        image.style.display = 'none'; // Hide the image
+      }
+    });
+  }
 
 </script>
 

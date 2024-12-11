@@ -2,21 +2,7 @@
 {% block title %}Bark Classification{% endblock %}
 {% block head %}
 {{ super() }}
-<script>
-    function toggleNames() {
-        var scientificNames = document.querySelectorAll('.scientific-name');
-        var commonNames = document.querySelectorAll('.common-name');
-        for (var i = 0; i < scientificNames.length; i++) {
-            if (scientificNames[i].style.display === 'none') {
-                scientificNames[i].style.display = 'inline';
-                commonNames[i].style.display = 'none';
-            } else {
-                scientificNames[i].style.display = 'none';
-                commonNames[i].style.display = 'inline';
-            }
-        }
-    }
-</script>
+
 <link rel="stylesheet" href="{{ url_for('static', filename='css/lightbox.css') }}">
 
 {% endblock %}
@@ -107,12 +93,6 @@
     </div>
 </div>
 
-<script>
-    // Dropdown toggle function
-    function toggleDropdown() {
-        const dropdown = document.getElementById('dropdownMenu');
-        dropdown.classList.toggle('hidden');
-    }
-</script>
+<script type='text/javascript' src="{{ url_for('static', filename='js/prediction.js') }}"></script>
 
 {% endblock %}
